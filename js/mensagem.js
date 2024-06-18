@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const selectUsuarioSender = document.getElementById('selectUsuarioSender');
     const selectUsuarioReciever = document.getElementById('selectUsuarioReciever');
     const form = document.getElementById('formSelecionarUsuarios');
-    
+    const mensagensDiv = document.getElementById('mensagens');
+
     // Função para obter a lista de usuários
     function obterUsuarios() {
         fetch('http://localhost/Adotyx-1/mensagem.php', {
@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     optionReciever.textContent = usuario.nome;
                     selectUsuarioReciever.appendChild(optionReciever);
                 });
+                // Iniciar atualização automática das mensagens
+                iniciarAtualizacaoMensagens();
             }
         })
         .catch(error => console.error('Erro ao obter usuários:', error));
@@ -63,6 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         position: "right",
                         backgroundColor: "green",
                     }).showToast();
+                    // Recarregar mensagens após enviar a mensagem
+                    recarregarMensagens(idReciever);
                 } else {
                     console.error(data.msg);
                     // Exibir mensagem de erro
@@ -87,8 +91,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).showToast();
             });
     });
-});
 
-function recarregarMensagens(idDestinatario){
-    
-}
+    // Função para recarregar mensagens
+    function recarregarMensagens(idDestinatario) {
+        fetch(`http://localhost/Adotyx-1/mensagem.php?idDestinatario=${idDestinatario}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.msg) {
+                console.error(data.msg);
+            } else {
+                mensagensDiv.innerHTML = ''; // Limpar mensagens existentes
+                data.forEach(mensagem => {
+                    const divMensagem = document.createElement('div');
+                    divMensagem.classList.add('mensagem');
+                    divMensagem.innerHTML = `<strong>${mensagem.nomeRemetente}</strong>: ${mensagem.conteudo} (${mensagem.data_envio})`;
+                    mensagensDiv.appendChild(divMensagem);
+                });
+            }
+        })
+        .catch(error => console.error('Erro ao recarregar mensagens:', error));
+    }
+
+    // Função para iniciar a atualização automática das mensagens a cada 500ms
+    function iniciarAtualizacaoMensagens() {
+        const idDestinatarioSelecionado = selectUsuarioReciever.value;
+        setInterval(() => {
+            recarregarMensagens(idDestinatarioSelecionado);
+        }, 500);
+    }
+});
