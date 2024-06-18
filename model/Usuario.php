@@ -58,6 +58,28 @@ class Usuario
             return false;
         }
     }
+
+    public static function salvarFotoPerfil($idUsuario, $imageData)
+    {
+        try {
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare("UPDATE usuario SET foto_perfil = ? WHERE id = ?");
+            return $stmt->execute([$imageData, $idUsuario]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function getFotoPerfil($idUsuario)
+    {
+        try {
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare("SELECT foto_perfil FROM usuario WHERE id = ?");
+            $stmt->execute([$idUsuario]);
+            return $stmt->fetchColumn();
+        } catch (Exception $e) {
+            return null;
+        }
 }
 
-?>
+}

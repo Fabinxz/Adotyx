@@ -35,16 +35,19 @@
     <div class="container">
         <h2>Minha Conta</h2>
         <div id="profile">
-            <img id="profile-picture" src="path_to_default_profile_picture.jpg" alt="Foto de Perfil">
+            <img id="profile-picture" src="" alt="Foto de Perfil">
             <form id="profile-form" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="profile-picture-input">Escolher Foto de Perfil</label>
-                    <input type="file" class="form-control-file" id="profile-picture-input" name="profile_picture">
+                    <input type="file" class="form-control-file" id="profile-picture-input" name="file">
                 </div>
-                <button type="submit" class="btn btn-primary">Salvar Foto</button>
+                <button type="button" class="btn btn-primary" id="save-profile-btn">Salvar Foto</button>
             </form>
         </div>
     </div>
+
+    <div id="response-content"></div>
+
     
     <script src="js/account.js"></script>
 </body>

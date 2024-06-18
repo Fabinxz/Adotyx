@@ -65,6 +65,8 @@ if (isMetodo("POST")) {
         }
 
         throw new Exception("Requisição não reconhecida", 400);
+
+        
     } catch (Exception $e) {
         returnJson($e->getCode(), $e->getMessage());
     }
