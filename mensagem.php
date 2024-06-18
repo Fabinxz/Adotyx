@@ -1,57 +1,47 @@
 <?php
+session_start();
 require_once "./config/utils.php";
 require_once "./config/verbs.php";
 require_once "./config/header.php";
 require_once "./model/Mensagem.php";
 require_once "./model/Usuario.php";
 
-
+$idUsuario = idUsuarioLogado();
 
 if (isMetodo("GET")) {
     try {
         if (parametrosValidos($_GET, ["idSender"])) {
-            /*implementar futuramente*/
+            // Implementar futuramente
         } else {
-            $usuario = Usuario::listarUsuarios();
-            output(200, $usuario);
+            $usuarios = Usuario::listarUsuarios();
+            output(200, $usuarios);
         }
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
-
-
-
 }
 
 if (isMetodo("POST")) {
     try {
-        if (parametrosValidos($_POST, ["idSender", "idReciever", "msg"])) {
-
-
-
-            $idSender = $_POST["idSender"];
-            $idReciever = $_POST["idReciever"];
+        if (parametrosValidos($_POST, ["idDestinatario", "msg"])) {
+            $idSender = $idUsuario;
+            $idDestinatario = $_POST["idDestinatario"];
             $msg = $_POST["msg"];
-            $res = Mensagem::enviarMensagem($idSender, $idReciever, $msg);
+            $res = Mensagem::enviarMensagem($idSender, $idDestinatario, $msg);
             if (!$res) {
                 throw new Exception("Erro ao enviar mensagem", 500);
             }
             output(200, ["confirmacao" => "Mensagem enviada com sucesso!"]);
-
-
+        } elseif (parametrosValidos($_POST, ["idDestinatario", "recuperarMensagem"])) {
+            $idSender = $idUsuario;
+            $idDestinatario = $_POST["idDestinatario"];
+            $res = Mensagem::retornarMensagensChat($idSender, $idDestinatario);
+            output(200, $res);
+        } else {
+            throw new Exception("Parâmetros inválidos", 400);
         }
-
-        if (parametrosValidos($_POST, ["idSender", "idReciever", "recuperarMensagem"])) {
-        
-        $idSender = $_POST["idSender"];
-        $idReciever = $_POST["idReciever"];
-        $res = Mensagem::retornarMensagensChat($idSender, $idReciever);
-        output(200, $res);
-        }
-
     } catch (Exception $e) {
-        output($e->getCode(), ["confirmacao" => $e->getMessage()]);
+        output($e->getCode(), ["msg" => $e->getMessage()]);
     }
-
-
 }
+?>

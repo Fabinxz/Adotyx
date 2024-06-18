@@ -9,7 +9,7 @@
 }
 
 * {
-    margin: 0;  
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins';
@@ -19,11 +19,14 @@ a {
     text-decoration: none !important;
 }
 
-body
-{
+body {
     background-image: url("https://images.unsplash.com/photo-1635776063328-153b13e3c245?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .logo {
@@ -39,7 +42,7 @@ body
 
 .logo img {
     height: 35px;
-    margin-right: 0px;
+    margin-right: 10px;
 }
 
 .logo h2 {
@@ -86,7 +89,7 @@ header nav ul li a:hover {
     color: #16157b;
 }
 
-header nav ul li a.button{
+header nav ul li a.button {
     text-decoration: none;
     color: #fff;
     background: linear-gradient(90deg, hsla(241, 64%, 36%, 1) 0%, hsla(240, 91%, 73%, 1) 100%);
@@ -101,18 +104,29 @@ header nav ul li a.active {
     border-bottom: 2px solid #16157b;
 }
 
-.form {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    padding: 40px;
-    transform: translate(-50%, -50%);
+.chat-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1200px;
     background: rgba(255, 255, 255, 0.14);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(17.4px);
     -webkit-backdrop-filter: blur(17.4px);
+    overflow: hidden;
+}
+
+.chat-container .form {
+    width: 30%;
+    padding: 40px;
+}
+
+.chat-container #mensagens {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.14);
+    padding: 40px;
+    overflow-y: auto;
 }
 
 .form h1 {
@@ -127,7 +141,7 @@ header nav ul li a.active {
     position: relative;
 }
 
-.form input, 
+.form input,
 .form select {
     width: 100%;
     padding: 10px 0;
@@ -178,13 +192,10 @@ header nav ul li a.active {
 }
 
 .form button:hover {
-    background: rgb(22,21,123);
+    background: rgb(22, 21, 123);
     color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 5px #16157b,
-        0 0 25px #16157b,
-        0 0 50px #16157b,
-        0 0 100px #16157b;
+    box-shadow: 0 0 5px #16157b, 0 0 25px #16157b, 0 0 50px #16157b, 0 0 100px #16157b;
 }
 
 .form button span {
@@ -192,3 +203,19 @@ header nav ul li a.active {
     display: block;
 }
 
+.mensagem {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}
+
+.mensagem .remetente {
+    font-weight: bold;
+    color: #16157b;
+    margin-bottom: 5px;
+}
+
+.mensagem .texto {
+    font-size: 16px;
+}

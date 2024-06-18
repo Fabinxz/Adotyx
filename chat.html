@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +11,6 @@
     <link rel="icon" type="image/x-icon" href="assets/logo.ico">
     <title>Chat</title>
 </head>
-
 <body>
     <header>
         <a href="index.html">
@@ -31,33 +29,29 @@
             </ul>
         </nav>
     </header>
-    <div class="form">
-        <h1>Chat</h1>
-        <form id="formSelecionarUsuarios">
-            <div>
-                <label for="selectUsuarioSender">Selecione o Usuário Remetente:</label>
-                <select id="selectUsuarioSender" name="selectUsuarioSender">
-                    <!-- Options serão adicionadas dinamicamente aqui -->
-                </select>
-            </div>
-            <div>
-                <label for="selectUsuarioReciever">Selecione o Usuário Destinatário:</label>
-                <select id="selectUsuarioReciever" name="selectUsuarioReciever">
-                    <!-- Options serão adicionadas dinamicamente aqui -->
-                </select>
-            </div>
-            <div>
-                <input type="text" id="msgBox" name="msgBox" class="mensagem-input" placeholder="Digite a mensagem">
-                <button type="submit" class="mensagem-button">Enviar</button>
-            </div>
-        </form>
-        <!-- <button type="button" class="reload-button" id="reloadMessagesButton">Recarregar</button> -->
-        <div id="mensagens">
+
+    <div class="chat-container">
+        <div class="form">
+            <h1>Chat</h1>
+            <form id="formSelecionarUsuarios">
+                <div>
+                    <label for="selectUsuarioReciever">Selecione o Usuário Destinatário:</label>
+                    <select id="selectUsuarioReciever" name="selectUsuarioReciever">
+                        <!-- Options serão adicionadas dinamicamente aqui -->
+                    </select>
+                </div>
+                <div>
+                    <input type="text" id="msgBox" name="msgBox" class="mensagem-input" placeholder="Digite a mensagem">
+                    <button type="submit" class="mensagem-button">Enviar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="mensagens" >
             <!-- Mensagens serão adicionadas dinamicamente aqui -->
         </div>
     </div>
 
-    <script src="js/chat.js"></script>
+    <script src="js/mensagem.js"></script>
 </body>
-
 </html>

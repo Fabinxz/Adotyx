@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
-        myHeaders.append('Cookie', 'PHPSESSID=5p2817l0b3cdj6de2fahclhvdv'); // Adicione seu cookie PHPSESSID aqui, se necessário
 
         const requestOptions = {
             method: 'POST',

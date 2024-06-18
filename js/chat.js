@@ -1,149 +1,84 @@
 
+document.addEventListener('DOMContentLoaded', function() {
+    const selectUsuarioSender = document.getElementById('selectUsuarioSender');
+    const selectUsuarioReciever = document.getElementById('selectUsuarioReciever');
+    const form = document.getElementById('formSelecionarUsuarios');
     
-
-    function popularSelectUsuarios(usuarios) {
-        let selectUsuarioSender = document.getElementById(
-            "selectUsuarioSender"
-        );
-        let selectUsuarioReciever = document.getElementById(
-            "selectUsuarioReciever"
-        );
-
-        // Limpa os selects antes de adicionar novas opções
-        selectUsuarioSender.innerHTML = "";
-        selectUsuarioReciever.innerHTML = "";
-
-        // Adiciona uma opção para cada usuário em ambos os selects
-        usuarios.forEach((usuario) => {
-            const optionSender = document.createElement("option");
-            const optionReciever = document.createElement("option");
-
-            optionSender.value = usuario.id;
-            optionSender.textContent = `${usuario.username} (ID: ${usuario.id})`;
-            selectUsuarioSender.appendChild(optionSender);
-
-            optionReciever.value = usuario.id;
-            optionReciever.textContent = `${usuario.username} (ID: ${usuario.id})`;
-            selectUsuarioReciever.appendChild(optionReciever);
-        });
-    }
-
-    // Função para fazer a requisição GET e popular os selects
-    async function carregarUsuarios() {
-        try {
-            const response = await fetch(`${ip}/chat/usuario.php`);
-            const data = await response.json();
-
-            // Verifica se a requisição foi bem-sucedida
-            if (response.ok) {
-                popularSelectUsuarios(data);
+    // Função para obter a lista de usuários
+    function obterUsuarios() {
+        fetch('http://localhost/Adotyx-1/mensagem.php', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.msg) {
+                console.error(data.msg);
             } else {
-                console.error("Erro ao carregar usuários:", data.msg);
-            }
-        } catch (error) {
-            console.error("Erro ao processar requisição:", error);
-        }
-    }
-
-    // Event listener para carregar usuários quando a página carregar
-    document.addEventListener("DOMContentLoaded", () => {
-        carregarUsuarios();
-    });
-
-    // Event listener para lidar com o envio do formulário de mensagem
-    document
-        .getElementById("formSelecionarUsuarios")
-        .addEventListener("submit", (event) => {
-            event.preventDefault(); // Evita o comportamento padrão de submissão do formulário
-
-            const idUsuarioSender = document.getElementById(
-                "selectUsuarioSender"
-            ).value;
-            const idUsuarioReciever = document.getElementById(
-                "selectUsuarioReciever"
-            ).value;
-            const mensagem = document.getElementById("msgBox").value;
-
-            enviarMensagem(idUsuarioSender, idUsuarioReciever, mensagem);
-        });
-
-    // Função para enviar uma mensagem
-    function enviarMensagem(idUsuarioSender, idUsuarioReciever, mensagem) {
-        const formData = new FormData();
-        formData.append("idSender", idUsuarioSender);
-        formData.append("idReciever", idUsuarioReciever);
-        formData.append("msg", mensagem);
-
-        fetch(`${ip}/chat/mensagem.php`, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `Erro na requisição: ${response.status} - ${response.statusText}`
-                    );
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Resposta recebida:", data);
-                // Atualiza as mensagens exibidas
-                receberMensagens(idUsuarioSender, idUsuarioReciever);
-            })
-            .catch((error) => {
-                console.error("Erro:", error);
-            });
-            atualizarMensagens(idUsuarioSender,idUsuarioReciever);
-    }
-
-    // Função para receber as mensagens entre dois usuários
-    function receberMensagens(idUsuarioSender, idUsuarioReciever) {
-        const formData = new FormData();
-        formData.append("idSender", idUsuarioSender);
-        formData.append("idReciever", idUsuarioReciever);
-        formData.append("recuperarMensagem", true);
-
-        fetch(`${ip}/chat/mensagem.php`, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `Erro na requisição: ${response.status} - ${response.statusText}`
-                    );
-                }
-                return response.json();
-            })
-            .then((data) => {
-                const mensagensDiv = document.getElementById("mensagens");
-                mensagensDiv.innerHTML = "";
-
-                data.forEach((mensagem) => {
-                    const mensagemElement = document.createElement("div");
-                    mensagemElement.textContent = `De: ${mensagem.sender_id}, Para: ${mensagem.receiver_id}, Mensagem: ${mensagem.mensagem}`;
-                    mensagensDiv.appendChild(mensagemElement);
+                data.forEach(usuario => {
+                    const optionReciever = document.createElement('option');
+                    optionReciever.value = usuario.id;
+                    optionReciever.textContent = usuario.nome;
+                    selectUsuarioReciever.appendChild(optionReciever);
                 });
-            })
-            .catch((error) => {
-                console.error("Erro ao receber mensagens:", error);
-            });
+            }
+        })
+        .catch(error => console.error('Erro ao obter usuários:', error));
     }
 
-    // Função para recarregar as mensagens
-    function recarregarMensagens() {
-        const idUsuarioSender = document.getElementById("selectUsuarioSender").value;
-        const idUsuarioReciever = document.getElementById("selectUsuarioReciever").value;
-        receberMensagens(idUsuarioSender, idUsuarioReciever);
-    }
+    // Carregar usuários ao carregar a página
+    obterUsuarios();
 
-    // Adiciona um evento de clique ao botão de recarregar mensagens
-    document.getElementById("reloadMessagesButton").addEventListener("click", recarregarMensagens);
+    // Função para enviar mensagem
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const idSender = selectUsuarioSender.value;
+        const idReciever = selectUsuarioReciever.value;
+        const msg = document.getElementById('msgBox').value;
 
-    // Função para atualizar as mensagens a cada segundo
-    function atualizarMensagens(idUsuarioSender, idUsuarioReciever) {
-        setInterval(() => {
-            receberMensagens(idUsuarioSender, idUsuarioReciever);
-        }, 1000);
-    }
+        fetch('http://localhost/Adotyx-1/mensagem.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `idSender=${idSender}&idReciever=${idReciever}&msg=${msg}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.confirmacao) {
+                console.log(data.confirmacao);
+                // Limpar o campo de mensagem após o envio
+                document.getElementById('msgBox').value = '';
+                // Exibir mensagem de sucesso
+                Toastify({
+                    text: "Mensagem enviada com sucesso!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                }).showToast();
+            } else {
+                console.error(data.msg);
+                // Exibir mensagem de erro
+                Toastify({
+                    text: "Erro ao enviar mensagem.",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "red",
+                }).showToast();
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar mensagem:', error);
+            // Exibir mensagem de erro
+            Toastify({
+                text: "Erro ao enviar mensagem.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+            }).showToast();
+        });
+    });
+});
