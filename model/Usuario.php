@@ -8,9 +8,9 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("INSERT INTO Usuarios (username, password, email) VALUES (?, ?, ?)");
-            $stmt->execute([$username, $password, $email]);
-
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $conexao->prepare("INSERT INTO usuario (nome, senha, email) VALUES (?, ?, ?)");
+            $stmt->execute([$username, $hashedPassword, $email]);
             return $stmt->rowCount() === 1;
         } catch (Exception $e) {
             return false;
@@ -21,15 +21,43 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->query("SELECT * FROM Users");
-            
-            // Retornar diretamente o array de usuários
+            $stmt = $conexao->query("SELECT * FROM usuario");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             return [];
         }
     }
-    
+
+    public static function existLogin($email)
+    {
+        try {
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare("SELECT COUNT(*) FROM usuario WHERE email = ?");
+            $stmt->execute([$email]);
+            $count = $stmt->fetchColumn();
+            return $count > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function getLogin($email, $password)
+    {
+        try {
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare("SELECT * FROM usuario WHERE email = ?");
+            $stmt->execute([$email]);
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($usuario && password_verify($password, $usuario['senha'])) {
+                return $usuario;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
 
 ?>

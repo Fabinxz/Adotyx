@@ -4,6 +4,9 @@ require_once "./config/verbs.php";
 require_once "./config/header.php";
 require_once "./model/Mensagem.php";
 require_once "./model/Usuario.php";
+
+
+
 if (isMetodo("GET")) {
     try {
         if (parametrosValidos($_GET, ["idSender"])) {
@@ -15,6 +18,9 @@ if (isMetodo("GET")) {
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
+
+
+
 }
 
 if (isMetodo("POST")) {

@@ -1,7 +1,6 @@
 
-    const ip = "";
     
-    
+
     function popularSelectUsuarios(usuarios) {
         let selectUsuarioSender = document.getElementById(
             "selectUsuarioSender"

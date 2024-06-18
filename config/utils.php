@@ -41,7 +41,7 @@ function idUsuarioLogado() {
     return false;
 }
 
-// Função que retorna o valor do campo "usuario" da sessão, se houver. False, caso não exista.
+// Função que define o valor do campo "usuario" da sessão
 function setIdUsuarioLogado($id) {
     $_SESSION["usuario"] = $id;
 }

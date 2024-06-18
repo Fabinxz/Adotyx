@@ -8,7 +8,7 @@ class Mensagem
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("INSERT INTO ChatMessages (sender_id, receiver_id, mensagem) VALUES (?, ?, ?)");
+            $stmt = $conexao->prepare("INSERT INTO chat (idRemetente, idDestinatario, conteudo) VALUES (?, ?, ?)");
             $stmt->execute([$idUsuarioSender, $idUsuarioReciever, $mensagem]);
 
             return $stmt->rowCount() === 1;
@@ -21,7 +21,7 @@ class Mensagem
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("SELECT * FROM ChatMessages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) ORDER BY data_envio");
+            $stmt = $conexao->prepare("SELECT * FROM chat WHERE (idRemetente = ? AND idDestinaraio = ?) OR (idDestinatario = ? AND idRemetente = ?) ORDER BY data_envio");
             $stmt->execute([$idUsuarioSender, $idUsuarioReciever, $idUsuarioReciever, $idUsuarioSender]);
             
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

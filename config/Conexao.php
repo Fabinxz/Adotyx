@@ -1,10 +1,6 @@
 <?php
 
-/*
-    Classe PHP que contémm um singleton que gera a conexão para um banco de dados usando PDO.
-    Atenção que os valores de hostname, database, username e password dependendem do ambiente sendo utilizado.
-    Lembre-se de colocar esse arquivo preferencialmente, em algum local com acesso restrito (.htaccess?)
-*/
+
 
 class Conexao
 {
@@ -13,16 +9,11 @@ class Conexao
     private function __construct()
     {
         if (in_array($_SERVER['REMOTE_ADDR'], ["127.0.0.1", "::1"])) {
-            // O servidor roda na própria máquina
+            // por enquanto nao vou definir senha para o banco de dados para facilitar o compartilhamento do codigo
             $hostname = 'localhost';
-            $database = 'chat';
+            $database = 'adotyx';
             $username = 'root';
             $password = '';
-        } else {
-            $hostname = '10.115.65.37:3306';
-            $database = 'chat';
-            $username = 'root';
-            $password = 'sua_senha';
         }
 
         $dsn = "mysql:host=$hostname;dbname=$database";
