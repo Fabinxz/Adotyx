@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (idDestinatarioSelecionado) {
             setInterval(() => {
                 carregarMensagens(idDestinatarioSelecionado);
-            }, 500);
+            }, 1500);
         }
     }
 
