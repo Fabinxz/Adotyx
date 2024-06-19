@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             redirect: 'follow'
         };
 
-        fetch('http://localhost/Adotyx-1/usuario.php', requestOptions)
+        fetch('usuario.php', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.msg) {

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para obter contatos do usuário logado
     function obterContatos() {
-        fetch('http://localhost/Adotyx-1/mensagem.php?contatos=true', {
+        fetch('mensagem.php?contatos=true', {
             method: 'GET'
         })
         .then(response => response.json())
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para carregar mensagens do chat com o usuário selecionado
     function carregarMensagens(idDestinatario) {
-        fetch(`http://localhost/Adotyx-1/mensagem.php?idDestinatario=${idDestinatario}`, {
+        fetch(`mensagem.php?idDestinatario=${idDestinatario}`, {
             method: 'GET'
         })
         .then(response => response.json())
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
             redirect: 'follow'
         };
 
-        fetch('http://localhost/Adotyx-1/mensagem.php', requestOptions)
+        fetch('mensagem.php', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.confirmacao) {

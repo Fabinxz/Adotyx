@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para obter a lista de usuários
     function obterUsuarios() {
-        fetch('http://localhost/Adotyx-1/mensagem.php', {
+        fetch('mensagem.php', {
             method: 'GET'
         })
         .then(response => response.json())
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             redirect: 'follow'
         };
 
-        fetch('http://localhost/Adotyx-1/mensagem.php', requestOptions)
+        fetch('mensagem.php', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if (data.confirmacao) {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para recarregar mensagens
     function recarregarMensagens(idDestinatario) {
-        fetch(`http://localhost/Adotyx-1/mensagem.php?idDestinatario=${idDestinatario}`, {
+        fetch(`mensagem.php?idDestinatario=${idDestinatario}`, {
             method: 'GET'
         })
         .then(response => response.json())

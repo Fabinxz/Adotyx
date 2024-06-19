@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Função para obter a lista de usuários
     function obterUsuarios() {
-        fetch('http://localhost/Adotyx-1/mensagem.php', {
+        fetch('http://localhost/Adotyx/mensagem.php', {
             method: 'GET'
         })
         .then(response => response.json())

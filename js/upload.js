@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData,
             };
 
-            fetch('http://localhost/Adotyx-1/upload.php', requestOptions)
+            fetch('upload.php', requestOptions)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Erro ao enviar a foto de perfil');

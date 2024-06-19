@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+        myHeaders.append('Cookie', 'PHPSESSID=5p2817l0b3cdj6de2fahclhvdv'); // Adicione seu cookie PHPSESSID aqui, se necessário
 
         const requestOptions = {
             method: 'POST',
@@ -19,23 +20,45 @@ document.addEventListener('DOMContentLoaded', function() {
             redirect: 'follow'
         };
 
-        fetch('http://localhost/Adotyx-1/usuario.php', requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao realizar login');
-                }
-                return response.json();
-            })
+        fetch('usuario.php', requestOptions)
+            .then(response => response.json())
             .then(data => {
-                alert(data.msg); // Mostra o resultado do login em uma janela de alerta
+                if (data.msg) {
+                    Toastify({
+                        text: data.msg,
+                        duration: 3000,
+                        close: true,
+                        gravity: 'top',
+                        position: 'right',
+                        backgroundColor: '#4CAF50'
+                    }).showToast();
 
-                if (data.msg === 'Login realizado com sucesso') {
-                    window.location.href = './account.html'; // Redireciona após login bem-sucedido
+                    if (data.msg === 'Login realizado com sucesso') {
+                        setTimeout(function() {
+                            window.location.href = './account.html';
+                        }, 2000); // Tempo de espera antes do redirecionamento (2 segundos neste exemplo)
+                    }
+                } else {
+                    Toastify({
+                        text: 'Erro ao realizar login',
+                        duration: 3000,
+                        close: true,
+                        gravity: 'top',
+                        position: 'right',
+                        backgroundColor: '#ff6347'
+                    }).showToast();
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao realizar login');
+                Toastify({
+                    text: 'Erro ao realizar login',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: '#ff6347'
+                }).showToast();
             });
     });
 });

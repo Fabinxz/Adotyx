@@ -15,9 +15,7 @@ function returnJson($code, $msg) {
 
 // Verifica se foi enviado um arquivo
 if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-    http_response_code(400);
-    echo json_encode(['msg' => 'Erro ao enviar a foto de perfil']);
-    exit;
+    returnJson(400, 'Erro ao enviar a foto de perfil');
 }
 
 // Obtém o ID do usuário logado (substitua conforme a sua lógica de autenticação)
@@ -33,29 +31,63 @@ if ($oldImagePath) {
     unlink($oldImagePath[0]); // Remove apenas a primeira imagem encontrada (deve ser apenas uma)
 }
 
-// Move o arquivo do diretório temporário para o diretório de upload
-if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadPath)) {
-    http_response_code(500);
-    echo json_encode(['msg' => 'Erro ao salvar a foto de perfil']);
-    exit;
+// Função para redimensionar a imagem
+function resizeImage($file, $maxHeight) {
+    list($width, $height, $type) = getimagesize($file);
+
+    if ($height > $maxHeight) {
+        $ratio = $maxHeight / $height;
+        $newWidth = $width * $ratio;
+        $newHeight = $maxHeight;
+
+        $src = null;
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $src = imagecreatefromjpeg($file);
+                break;
+            case IMAGETYPE_PNG:
+                $src = imagecreatefrompng($file);
+                break;
+            case IMAGETYPE_GIF:
+                $src = imagecreatefromgif($file);
+                break;
+            default:
+                return false;
+        }
+
+        $dst = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($dst, $file);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($dst, $file);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($dst, $file);
+                break;
+        }
+
+        imagedestroy($src);
+        imagedestroy($dst);
+    }
+
+    return true;
 }
 
-// try {
-//     $image = new \claviska\SimpleImage();
-//     $image->fromFile($uploadPath)->bestFit(400, 400)->toFile($uploadPath);
-// } catch (Exception $e) {
-//     http_response_code(500);
-//     echo json_encode(['msg' => 'Erro ao redimensionar a imagem: ' . $e->getMessage()]);
-//     exit;
-// }
-// Salva o caminho da imagem no banco de dados usando a classe Usuario
+// Move o arquivo do diretório temporário para o diretório de upload e redimensiona
+if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadPath) || !resizeImage($uploadPath, 500)) {
+    returnJson(500, 'Erro ao salvar ou redimensionar a foto de perfil');
+}
+
 $res = Usuario::salvarFotoPerfil($idUsuario, $uploadPath);
 
 if ($res) {
     // Retorna o caminho da foto de perfil para ser utilizado na interface
     echo json_encode(['msg' => 'Foto de perfil enviada e atualizada com sucesso.', 'foto_perfil' => $uploadPath]);
 } else {
-    http_response_code(500);
-    echo json_encode(['msg' => 'Erro ao atualizar a foto de perfil na base de dados.']);
+    returnJson(500, 'Erro ao atualizar a foto de perfil na base de dados.');
 }
 ?>
