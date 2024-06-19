@@ -108,7 +108,8 @@ header nav ul li a.button{
     background: linear-gradient(90deg, hsla(241, 64%, 36%, 1) 0%, hsla(240, 91%, 73%, 1) 100%);
     padding: 10px 20px;
     border-radius: 25px;
-    margin: 0 10px;
+    margin-left: -10px;
+    margin-right: -10px;
     font-weight: bold;
     transition: 0.3s;
 }
