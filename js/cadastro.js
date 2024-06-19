@@ -1,37 +1,41 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('form-foto-perfil').addEventListener('submit', function(event) {
+    document.getElementById('login-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const formData = new FormData(); // Cria um objeto FormData vazio
+        const formData = new FormData(this);
+        const urlencoded = new URLSearchParams();
 
-        // Adiciona o arquivo de foto_perfil ao FormData
-        const fileField = document.querySelector('input[type="file"]');
-        formData.append('foto_perfil', fileField.files[0]);
+        formData.forEach((value, key) => {
+            urlencoded.append(key, value);
+        });
+
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
         const requestOptions = {
             method: 'POST',
-            body: formData,
+            headers: myHeaders,
+            body: urlencoded,
             redirect: 'follow'
         };
 
-        fetch('http://localhost/Adotyx-1/upload-profile-picture.php', requestOptions)
+        fetch('http://localhost/Adotyx-1/usuario.php', requestOptions)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Erro ao enviar a foto de perfil');
+                    throw new Error('Erro ao realizar login');
                 }
                 return response.json();
             })
             .then(data => {
-                alert(data.msg); // Mostra o resultado do envio da foto em um alerta
+                alert(data.msg); // Mostra o resultado do login em uma janela de alerta
 
-                // Redireciona para a página de conta se o envio for bem-sucedido
-                if (data.msg === 'Foto de perfil enviada com sucesso') {
-                    window.location.href = './account.html';
+                if (data.msg === 'Login realizado com sucesso') {
+                    window.location.href = './account.html'; // Redireciona após login bem-sucedido
                 }
             })
             .catch(error => {
-                console.error('Erro ao enviar a foto de perfil:', error);
-                alert('Erro ao enviar a foto de perfil');
+                console.error('Erro:', error);
+                alert('Erro ao realizar login');
             });
     });
 });

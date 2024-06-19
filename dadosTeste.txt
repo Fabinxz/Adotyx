@@ -1,0 +1,32 @@
+-- Inserção de dados na tabela `animal`
+INSERT INTO `animal` (`nome`, `idade`, `raca`, `sexo`, `preco`) VALUES
+('Rex', 3, 'Labrador', 'M', 300.00),
+('Mia', 2, 'Golden Retriever', 'F', 400.00),
+('Simba', 4, 'Persian', 'M', 200.00),
+('Bella', 1, 'Siamese', 'F', 250.00);
+
+-- Inserção de dados na tabela `usuario`
+INSERT INTO `usuario` (`nome`, `email`, `senha`, `foto_perfil`) VALUES
+('Alice', 'alice@example.com', '$2y$10$dummyhash1', './uploads/profile-pictures/1_profile.jpg'),
+('Bob', 'bob@example.com', '$2y$10$dummyhash2', './uploads/profile-pictures/2_profile.jpg'),
+('Charlie', 'charlie@example.com', '$2y$10$dummyhash3', './uploads/profile-pictures/3_profile.jpg'),
+('David', 'david@example.com', '$2y$10$dummyhash4', './uploads/profile-pictures/4_profile.jpg'),
+('Eve', 'eve@example.com', '$2y$10$dummyhash5', './uploads/profile-pictures/5_profile.jpg');
+
+-- Inserção de dados na tabela `chat`
+INSERT INTO `chat` (`idRemetente`, `idDestinatario`, `conteudo`, `data_envio`) VALUES
+(1, 2, 'Olá, como vai?', '2024-06-18 10:15:00'),
+(2, 1, 'Tudo bem, e você?', '2024-06-18 10:16:00'),
+(3, 4, 'Oi, podemos conversar sobre o projeto?', '2024-06-18 11:20:00'),
+(4, 3, 'Claro, qual a sua dúvida?', '2024-06-18 11:21:00'),
+(5, 1, 'Hey, você viu a última atualização?', '2024-06-18 12:30:00'),
+(1, 5, 'Sim, achei muito boa!', '2024-06-18 12:31:00');
+
+-- Inserção de dados na tabela `tutor`
+INSERT INTO `tutor` (`idTutor`, `idAnimal`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4);
+
+COMMIT;
