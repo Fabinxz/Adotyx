@@ -8,8 +8,9 @@ class Mensagem
     {
         try {
             $conexao = Conexao::getConexao();
+            $mensagemLimpa = strip_tags($mensagem);
             $stmt = $conexao->prepare("INSERT INTO chat (idRemetente, idDestinatario, conteudo) VALUES (?, ?, ?)");
-            $stmt->execute([$idUsuarioSender, $idUsuarioReciever, $mensagem]);
+            $stmt->execute([$idUsuarioSender, $idUsuarioReciever, $mensagemLimpa]);
 
             return $stmt->rowCount() === 1;
         } catch (Exception $e) {
